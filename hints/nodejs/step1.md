@@ -104,6 +104,9 @@ Update code:
 
 ```
 require('dotenv').config();
+...
+var tableName = process.env.BOT_STATE_TABLE;
+var storageAccountConnection = process.env.STORAGE_ACCOUNT_CONNECTION_STRING;
 ```
 
 Add `.env` to `.gitignore` and commit changes to Git:

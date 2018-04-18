@@ -102,7 +102,7 @@ Goto `Bot Service in Azure Portal` --> `Application Settings` --> `App Settings`
 
 Update code:
 
-```
+```javascript
 require('dotenv').config();
 ...
 var tableName = process.env.BOT_STATE_TABLE;

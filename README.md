@@ -25,6 +25,8 @@ Here are some resources that might help you reaching your goal quicker:
 
 ### Step 2 - Implement dialog flow
 
+![Goal for Step 2](images/step2.png "Goal for Step 2")
+
 In the second step, we'll lay out the basic dialog flow of our bot. In order to move to the next step, you should be able to check off the following items:
 
 * Have a root dialog

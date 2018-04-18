@@ -6,6 +6,8 @@ Welcome to the Chatbot Development Hands-On Day! Today, we'll go through how to 
 
 ### Step 1 - Setup a basic bot
 
+![Goal for Step 1](images/step1.png "Goal for Step 1")
+
 As a first step, we need to lay out the foundation for our bot. This means getting a basic bot running, enable basic CI (Continuous Integration) via `git`. In order to move to the next step, you should be able to check off the following items:
 
 * You have a simple Echo Bot running on App Service (if you want, you can also try a Function Bot)

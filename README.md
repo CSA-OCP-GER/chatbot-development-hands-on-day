@@ -10,7 +10,7 @@ Welcome to the Chatbot Development Hands-On Day! Today, we'll go through how to 
 
 As a first step, we need to lay out the foundation for our bot. This means getting a basic bot running, enable basic CI (Continuous Integration) via `git`. In order to move to the next step, you should be able to check off the following items:
 
-* You have a simple Echo Bot running on App Service (if you want, you can also try a Function Bot)
+* You have a Bot running on App Service (based on the `Basic` template in the Azure Portal)
 * You should be able to deploy code change to your bot via local Git deployment
 * You should be able to test your bot locally before pushing to Azure
 * Your bot should persist its state in an Azure Table

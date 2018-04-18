@@ -4,20 +4,11 @@
 
 Add main selection dialog with buttons:
 
-```js
-var botChoices = {
-    'Request Time-Off': 'requestTimeOff',
-    'Show Time-Off': 'showTimeOff'
-};
-
+```javascript
 bot.dialog('/', [
-    function(session) {
+    function (session) {
         session.send("Hello, I'm here to help you with booking time-off requests!");
-        builder.Prompts.choice(session, "How can I help you?", Object.keys(botChoices), { listStyle: builder.ListStyle.button });
-    },
-    function (session, results) {
-        var action = botChoices[results.response.entity];
-        return session.beginDialog(action);
+        builder.Prompts.choice(session, "How can I help you?", ["Request time-off", "Show time-off"], { listStyle: builder.ListStyle.button });
     },
     function (session) {
         session.replaceDialog('/');
@@ -25,33 +16,35 @@ bot.dialog('/', [
 ]);
 ```
 
+Having `replaceDialog` at the end of the main dialog makes it repeat forever. Alternatively, we could ask the user if they want to continue, i.e. closing the conversation if they answer with 'no'.
+
 ## Core dialogs
 
-```js
+```javascript
 bot.dialog('requestTimeOff', [
-    function(session) {
-        session.endDialog('Here you will later implement code to request time off');
+    function (session) {
+        session.endDialog('Here you will later implement code to request time-off');
     }
-]);
+]).triggerAction({
+    matches: /^request time-off$/i
+});
 
 bot.dialog('showTimeOff', [
-    function(session) {
-        session.endDialog('Here you will later implement code to show time off');
+    function (session) {
+        session.endDialog('Here you will later implement code to show time-off');
     }
-]);
+]).triggerAction({
+    matches: /^show time-off$/i
+});
 ```
 
 ## Add help dialog
 
-```js
+```javascript
 bot.dialog('help', function (session, args, next) {
     session.send("I'm here to help you:");
     session.endDialog("For example, ask me to 'Request time-off' or 'Show time-off'");
-})
-.triggerAction({
-    matches: /^help$/i,
-    onSelectAction: (session, args, next) => {
-        session.beginDialog(args.action, args);
-    }
+}).triggerAction({
+    matches: /^help$/i
 });
 ```

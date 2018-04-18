@@ -41,6 +41,8 @@ Here are some resources that might help you reaching your goal quicker:
 
 ### Step 3 - Add natural language understanding
 
+![Goal for Step 3](images/step3.png "Goal for Step 3")
+
 In this step, we'll make our bot understand natural language. For this, we'll leverage LUIS (Azure's Language Understanding Service). This means you have to create a custom language model and connect it to your bot. In order to move to the next step, you should be able to check off the following items:
 
 * Have a LUIS model trained and published, that will be used to recognize the user's intent (request time-off or show existing time-off)
@@ -53,7 +55,7 @@ Here are some resources that might help you reaching your goal quicker:
 
 ### Step 4 - Implement business logic
 
-Lastly, we want to implement some (basic) business logic in our bot. In a real world example, the bot might integrate with an existing system for processing time-off requests, in our example you can use a storage destination of your choice. You can even use `userData` for persisting time-off requests, but be aware that those are channel specific. In order to complete the main part of our day, you should be able to check off the following items:
+Lastly, we want to implement some (basic) business logic in our bot. In a real world example, our bot might integrate with existing systems for processing time-off requests. In our example here, we can use a storage destination of our choice. You can even use `userData` for persisting time-off requests, but be aware that `userData` is channel specific. In order to complete the main part of our day, you should be able to check off the following items:
 
 * Your "request time-off" dialog should request time-off parameters like start date, end date, and vacation destination
 * Your "show time-off" dialog should show existing time-off requests using Adaptive Cards

@@ -2,13 +2,24 @@
 
 ## Main dialog with selection buttons
 
+*As a side note*: There are many ways of how to implement this, but as we'll enhance the dialog routing logic with LUIS in the next step, let's just get something working quickly.
+
 Add main selection dialog with buttons:
 
 ```javascript
+var menuChoices = {
+    'Request Time-Off': 'requestTimeOff',
+    'Show Time-Off': 'showTimeOff'
+};
+
 bot.dialog('/', [
-    function (session) {
+    function(session) {
         session.send("Hello, I'm here to help you with booking time-off requests!");
-        builder.Prompts.choice(session, "How can I help you?", ["Request time-off", "Show time-off"], { listStyle: builder.ListStyle.button });
+        builder.Prompts.choice(session, "How can I help you?", Object.keys(menuChoices), { listStyle: builder.ListStyle.button });
+    },
+    function (session, results) {
+        var action = menuChoices[results.response.entity];
+        return session.beginDialog(action);
     },
     function (session) {
         session.replaceDialog('/');
@@ -25,25 +36,20 @@ bot.dialog('requestTimeOff', [
     function (session) {
         session.endDialog('Here you will later implement code to request time-off');
     }
-]).triggerAction({
-    matches: /^request time-off$/i
-});
+]);
 
 bot.dialog('showTimeOff', [
     function (session) {
         session.endDialog('Here you will later implement code to show time-off');
     }
-]).triggerAction({
-    matches: /^show time-off$/i
-});
+]);
 ```
 
 ## Add help dialog
 
 ```javascript
 bot.dialog('help', function (session, args, next) {
-    session.send("I'm here to help you:");
-    session.endDialog("For example, ask me to 'Request time-off' or 'Show time-off'");
+    session.endDialog("I'm here to help you:<br>For example, ask me to 'Request time-off' or 'Show time-off'");
 }).triggerAction({
     matches: /^help$/i
 });

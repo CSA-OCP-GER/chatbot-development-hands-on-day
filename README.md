@@ -2,6 +2,10 @@
 
 Welcome to the Chatbot Development Hands-On Day! Today, we'll go through how to build a simple "Time-Off Bot" using [Azure Bot Service](https://docs.microsoft.com/en-us/azure/bot-service/). The day is organized by different challenges and participants should complete Step 1 through 4. Step 5 contains additional ideas that can be implemented if desired.
 
+Our final bot might look something like this:
+
+![Our final bot](images/final.jpg "Our final bot")
+
 ## Challenges
 
 ### Step 1 - Setup a basic bot

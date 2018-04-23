@@ -14,7 +14,7 @@ az storage account create --resource-group chatbotday-nodejs --sku Standard_LRS 
 
 az storage table create --account-name cbdbotstate --name botstateprod
 
-#Optional: use a seperate table for local testing
+#Optional: use a separate table for local testing
 az storage table create --account-name cbdbotstate --name botstatedev
 ```
 
@@ -31,7 +31,7 @@ az storage account show-connection-string --resource-group chatbotday-nodejs --n
 
 ## Create Bot Service and setup deployment via git
 
-1. Create Bot Service based on App Service with the `Basic` template
+1. Create Bot Service based on App Service (Web App Bot) with the `Basic Node.js` template
 1. Install [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
 1. Install [Bot Framework Emulator](https://github.com/Microsoft/BotFramework-Emulator/releases)
 1. Configure local Git repo: Navigate to your bot --> `Build` --> `Configure Continuous Deployment` --> `Setup` --> `Local Git Repository`
@@ -141,5 +141,7 @@ git add .gitignore app.js package.json
 git commit -m "Proper storing of secrets in .env file"
 git push
 ```
+
+*Note:* There are even cleaner ways to keep your credentials out of the code (and code repository in general), e.g., by using [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/).
 
 Congratulations, you finished the basic bot setup and you're now able to easily push code updates to Azure!

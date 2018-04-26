@@ -7,6 +7,63 @@
 Add main selection dialog with buttons:
 
 ```javascript
+bot.dialog('/', [
+    function (session) {
+        session.send("Hello, I'm here to help you with booking time-off requests!");
+        var msg = new builder.Message(session)
+            .text("How can I help you?")
+            .suggestedActions(
+                builder.SuggestedActions.create(
+                    session, [
+                        builder.CardAction.imBack(session, "Request Time-Off", "Request Time-Off"),
+                        builder.CardAction.imBack(session, "Show Time-Off", "Show Time-Off"),
+                    ]
+                ));
+        session.send(msg);
+    },
+    function (session) {
+        session.replaceDialog('/');
+    }
+]);
+```
+
+Having `replaceDialog` at the end of the main dialog makes it repeat forever. Alternatively, we could ask the user if they want to continue, i.e. closing the conversation if they answer with 'no'.
+
+## Core dialogs
+
+```javascript
+bot.dialog('requestTimeOff', [
+    function (session) {
+        session.endDialog('Here you will later implement code to request time-off');
+    }
+]).triggerAction({
+  matches: /^request time-off$/i
+});
+
+bot.dialog('showTimeOff', [
+    function (session) {
+        session.endDialog('Here you will later implement code to show time-off');
+    }
+]).triggerAction({
+  matches: /^show time-off$/i
+});
+```
+
+## Add help dialog
+
+```javascript
+bot.dialog('help', function (session, args, next) {
+    session.endDialog("I'm here to help you:<br>For example, ask me to 'Request time-off' or 'Show time-off'");
+}).triggerAction({
+    matches: /^help$/i
+});
+```
+
+## Alternative Solution
+
+As an alternative, we can also use the `Prompts` helpers:
+
+```javascript
 var menuChoices = {
     'Request Time-Off': 'requestTimeOff',
     'Show Time-Off': 'showTimeOff'
@@ -27,9 +84,7 @@ bot.dialog('/', [
 ]);
 ```
 
-Having `replaceDialog` at the end of the main dialog makes it repeat forever. Alternatively, we could ask the user if they want to continue, i.e. closing the conversation if they answer with 'no'.
-
-## Core dialogs
+In this case, we're actively routing answers to the respective dialogs, thus not needing the `triggerAction`:
 
 ```javascript
 bot.dialog('requestTimeOff', [
@@ -43,14 +98,4 @@ bot.dialog('showTimeOff', [
         session.endDialog('Here you will later implement code to show time-off');
     }
 ]);
-```
-
-## Add help dialog
-
-```javascript
-bot.dialog('help', function (session, args, next) {
-    session.endDialog("I'm here to help you:<br>For example, ask me to 'Request time-off' or 'Show time-off'");
-}).triggerAction({
-    matches: /^help$/i
-});
 ```

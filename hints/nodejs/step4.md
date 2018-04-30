@@ -69,45 +69,27 @@ bot.dialog('requestTimeOff', [
 Lastly, we can use a [carousel of Hero cards](https://docs.microsoft.com/en-us/azure/bot-service/nodejs/bot-builder-nodejs-send-rich-cards#send-a-carousel-of-hero-cards) to nicely display the existing time-off requests for a user. This would also allow us to easily add a button for deleting existing requests.
 
 ```javascript
-bot.dialog('requestTimeOff', [
+bot.dialog('showTimeOff', [
     function (session) {
+
         if (session.userData.timeoff == null) {
             session.userData.timeoff = [];
         }
 
-        builder.Prompts.time(session, "Please provide a start date (e.g.: June 6th 2018)");
-    },
-    function (session, results) {
-        session.dialogData.startDate = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.time(session, "Please provide an end date (e.g.: June 8th 2018)");
-    },
-    function (session, results) {
-        session.dialogData.endDate = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.text(session, "Where are you heading to?");
-    },
-    function (session, results) {
-        session.dialogData.destination = results.response;
-        session.send("Time-off request from %s to %s, %s",
-            session.dialogData.startDate, session.dialogData.endDate, session.dialogData.destination);
-        builder.Prompts.confirm(session, "Do you want to proceed in this request?", { listStyle: builder.ListStyle.button });
-    },
-    function (session, results) {
-        if (results.response) {
-            let timeoffRequest = {
-                "start_date": session.dialogData.startDate,
-                "end_date": session.dialogData.endDate,
-                "destination": session.dialogData.destination
-            };
-            session.userData.timeoff.push(timeoffRequest)
+        var msg = new builder.Message(session);
+        msg.attachmentLayout(builder.AttachmentLayout.carousel)
+        let cards = [];
 
-            session.send('Time-off request was accepted');
-        } else {
-            session.send('Time-off request was discarded');
+        for (let t of session.userData.timeoff) {
+            cards.push(new builder.HeroCard(session)
+                .title(`Trip to ${t.destination}`)
+                .text(`From ${t.start_date} to ${t.end_date}`));
         }
-        session.endDialog();
+        msg.attachments(cards);
+        session.endDialog(msg);
     }
 ]).triggerAction({
-    matches: 'RequestTimeOff'
+    matches: 'ShowTimeOff'
 });
 ```
 ![Our final bot](../../images/final.jpg "Our final bot")

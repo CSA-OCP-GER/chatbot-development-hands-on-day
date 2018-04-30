@@ -15,19 +15,19 @@ Open the `Dialogs` folder and add three new files of the type `Bot Dialog`:
 First, we need to make sure our `MessagesController.cs` forwards messages into our `RootDialog.cs`:
 
 ```csharp
-    [ResponseType(typeof(void))]
-    public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
+[ResponseType(typeof(void))]
+public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
+{
+    if (activity != null && activity.GetActivityType() == ActivityTypes.Message)
     {
-        if (activity != null && activity.GetActivityType() == ActivityTypes.Message)
-        {
-            await Conversation.SendAsync(activity, () => new RootDialog());
-        }
-        else
-        {
-            HandleSystemMessage(activity);
-        }
-        return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+        await Conversation.SendAsync(activity, () => new RootDialog());
     }
+    else
+    {
+        HandleSystemMessage(activity);
+    }
+    return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+}
 ```
 
 ## Core dialogs
@@ -71,50 +71,66 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Dialogs
 Lastly, we can implement our `RootDialog`:
 
 ```csharp
-namespace Microsoft.Bot.Sample.SimpleEchoBot.Dialogs
+[Serializable]
+public class RootDialog : IDialog<object>
 {
-    [Serializable]
-    public class RootDialog : IDialog<object>
+
+    public async Task StartAsync(IDialogContext context)
     {
+        // Wait for the first message from the user
+        context.Wait(MessageReceivedAsync);
+    }
 
-        private const string RequestTimeOff = "Request time-off";
-        private const string ShowTimeOff = "Show time-off";
+    private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> response)
+    {
+        // Now we received a message
+        var message = await response;
 
-        public async Task StartAsync(IDialogContext context)
+        // check if our messages matches some of our actions?
+        switch(message.Text.ToLower())
         {
-            context.Wait(MessageReceivedAsync);
+            case "request time-off":
+                // Put the dialog ontop of the stack, but the method will still continue!
+                context.Call(new RequestTimeOffDialog(), ResumeAfterDialog);
+                break;
+            case "show time-off":
+                context.Call(new ShowTimeOffDialog(), ResumeAfterDialog);
+                break;
+            case "help":
+                context.Call(new HelpDialog(), ResumeAfterDialog);
+                break;
+            default:
+                // Write welcome message and wait for a response
+                WriteWelcomeMessage(context);
+                context.Wait(MessageReceivedAsync);
+                break;
         }
+    }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+    private async void WriteWelcomeMessage(IDialogContext context)
+    {
+        var activity = context.Activity as Activity;
+
+        var reply = activity.CreateReply("Hello, I'm here to help you with booking time-off requests! How can I help you?");
+        reply.Type = ActivityTypes.Message;
+        reply.TextFormat = TextFormatTypes.Plain;
+
+        reply.SuggestedActions = new SuggestedActions()
         {
-            PromptDialog.Choice(
-                context,
-                this.ResumeAfterSelection,
-                new[] { RequestTimeOff, ShowTimeOff },
-                "Hello, I'm here to help you with booking time-off requests! How can I help you?", 
-                "Sorry, I did not understand you. Please choose one of the options below.");
-        }
-
-        private async Task ResumeAfterSelection(IDialogContext context, IAwaitable<string> result)
-        {
-            try
+            Actions = new List<CardAction>()
             {
-                var selection = await result;
-
-                switch (selection)
-                {
-                    case RequestTimeOff:
-                        context.Call(new RequestTimeOffDialog(), this.MessageReceivedAsync);
-                        break;
-                    case ShowTimeOff:
-                        context.Call(new ShowTimeOffDialog(), this.MessageReceivedAsync);
-                        break;
-                }
-            } catch (TooManyAttemptsException)
-            {
-                await this.StartAsync(context);
+                new CardAction(){ Title = "Request time-off", Value="Request time-off" },
+                new CardAction(){ Title = "Show time-off", Value="Show time-off" }
             }
-        }
+        };
+        await context.PostAsync(reply);
+    }
+
+    private async Task ResumeAfterDialog(IDialogContext context, IAwaitable<object> result)
+    {
+        // Display selection menu again
+        WriteWelcomeMessage(context);
+        context.Wait(this.MessageReceivedAsync);
     }
 }
 ```
@@ -133,6 +149,56 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Dialogs
         {
             await context.PostAsync("One day, this dialog might help you with something...");
             context.Done<object>(null);
+        }
+    }
+}
+```
+
+## Alternative Solution using Prompts
+
+Alternatively, we can use `PromptsDialog` in `RootDialog`. This is a more strict selction dialog, that is usually used for asking the user for very specific pieces of information (e.g., a date, quanity, etc.).
+
+```csharp
+[Serializable]
+public class RootDialog : IDialog<object>
+{
+
+    private const string RequestTimeOff = "Request time-off";
+    private const string ShowTimeOff = "Show time-off";
+
+    public async Task StartAsync(IDialogContext context)
+    {
+        context.Wait(MessageReceivedAsync);
+    }
+
+    private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+    {
+        PromptDialog.Choice(
+            context,
+            this.ResumeAfterSelection,
+            new[] { RequestTimeOff, ShowTimeOff },
+            "Hello, I'm here to help you with booking time-off requests! How can I help you?", 
+            "Sorry, I did not understand you. Please choose one of the options below.");
+    }
+
+    private async Task ResumeAfterSelection(IDialogContext context, IAwaitable<string> result)
+    {
+        try
+        {
+            var selection = await result;
+
+            switch (selection)
+            {
+                case RequestTimeOff:
+                    context.Call(new RequestTimeOffDialog(), this.MessageReceivedAsync);
+                    break;
+                case ShowTimeOff:
+                    context.Call(new ShowTimeOffDialog(), this.MessageReceivedAsync);
+                    break;
+            }
+        } catch (TooManyAttemptsException)
+        {
+            await this.StartAsync(context);
         }
     }
 }

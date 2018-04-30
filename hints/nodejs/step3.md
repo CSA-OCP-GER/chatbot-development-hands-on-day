@@ -33,3 +33,5 @@ bot.dialog('showTimeOff', [
     matches: 'ShowTimeOff'
 });
 ```
+
+Lastly, update your App Settings in Azure to also have a `LUIS_MODEL_URL` field pointing to the LUIS URL.

@@ -24,8 +24,73 @@ First, we need to add the LUIS AppId, Key and Hostname to our `Web.config`
 
 Next, update your App Settings in Azure to also have fields and values for `LuisAppId`, `LuisAPIKey`, and `LuisAPIHostName`.
 
-Then, update all relevant dialogs to leverage `triggerAction` for linkage with the LUIS intents:
+Next, let's create an `LuisRootDialog.cs` for implementing a new root dialog:
 
 ```csharp
+[Serializable]
+public class LuisRootDialog : LuisDialog<object>
+{
 
+    public LuisRootDialog() : base(new LuisService(new LuisModelAttribute(
+        ConfigurationManager.AppSettings["LuisAppId"],
+        ConfigurationManager.AppSettings["LuisAPIKey"],
+        domain: ConfigurationManager.AppSettings["LuisAPIHostName"])))
+    {
+    }
+
+    [LuisIntent("None")]
+    public async Task NoneIntent(IDialogContext context, LuisResult result)
+    {
+        await this.ShowLuisResult(context, result);
+    }
+
+    [LuisIntent("Greeting")]
+    public async Task GreetingIntent(IDialogContext context, LuisResult result)
+    {
+        await context.PostAsync("Hey, you can ask me things like 'request time off' or 'show my time off'!");
+    }
+
+    [LuisIntent("RequestTimeOff")]
+    public async Task RequestTimeOffIntent(IDialogContext context, LuisResult result)
+    {
+        context.Call(new RequestTimeOffDialog(), ResumeAfterDialog);
+    }
+
+    [LuisIntent("ShowTimeOff")]
+    public async Task ShowTimeOffIntent(IDialogContext context, LuisResult result)
+    {
+        context.Call(new ShowTimeOffDialog(), ResumeAfterDialog);
+    }
+
+    private async Task ShowLuisResult(IDialogContext context, LuisResult result)
+    {
+        await context.PostAsync($"You have reached {result.Intents[0].Intent}. You said: {result.Query}");
+        context.Wait(MessageReceived);
+    }
+
+    private async Task ResumeAfterDialog(IDialogContext context, IAwaitable<object> result)
+    {
+        await context.PostAsync("What else can I do for you?");
+        context.Wait(MessageReceived);
+    }
+}
+```
+
+Lastly, update `MessagesController.cs` to route to our new `LuisRootDialog`:
+
+```csharp
+[ResponseType(typeof(void))]
+public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
+{
+    // check if activity is of type message
+    if (activity != null && activity.GetActivityType() == ActivityTypes.Message)
+    {
+        await Conversation.SendAsync(activity, () => new LuisRootDialog());
+    }
+    else
+    {
+        HandleSystemMessage(activity);
+    }
+    return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+}
 ```

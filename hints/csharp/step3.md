@@ -47,7 +47,7 @@ public class LuisRootDialog : LuisDialog<object>
     [LuisIntent("Greeting")]
     public async Task GreetingIntent(IDialogContext context, LuisResult result)
     {
-        await context.PostAsync("Hey, you can ask me things like 'request time off' or 'show my time off'!");
+        WriteWelcomeMessage(context);
     }
 
     [LuisIntent("RequestTimeOff")]
@@ -70,8 +70,27 @@ public class LuisRootDialog : LuisDialog<object>
 
     private async Task ResumeAfterDialog(IDialogContext context, IAwaitable<object> result)
     {
-        await context.PostAsync("What else can I do for you?");
+        WriteWelcomeMessage(context);
         context.Wait(MessageReceived);
+    }
+
+    private async void WriteWelcomeMessage(IDialogContext context)
+    {
+        var activity = context.Activity as Activity;
+
+        var reply = activity.CreateReply("Hello, I'm here to help you with booking time-off requests! How can I help you?");
+        reply.Type = ActivityTypes.Message;
+        reply.TextFormat = TextFormatTypes.Plain;
+
+        reply.SuggestedActions = new SuggestedActions()
+        {
+            Actions = new List<CardAction>()
+            {
+                new CardAction(){ Title = "Request time-off", Value="Request time-off" },
+                new CardAction(){ Title = "Show time-off", Value="Show time-off" }
+            }
+        };
+        await context.PostAsync(reply);
     }
 }
 ```

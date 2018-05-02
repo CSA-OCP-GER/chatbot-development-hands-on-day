@@ -18,7 +18,7 @@ az storage table create --account-name cbdbotstate --name botstateprod
 az storage table create --account-name cbdbotstate --name botstatedev
 ```
 
-Upon bot creation, Azure automatically creates a Storage Account for you, but given the random naming, it might be smarter to create your own.
+Upon bot creation, Azure automatically creates a Storage Account for you, but given the random naming, it might be less confusing to create your own.
 
 Get the connection string for storage account access:
 
@@ -125,7 +125,7 @@ var azureTableClient = new botbuilder_azure.AzureTableClient(BOT_STATE_TABLE, ST
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
 ```
 
-Goto `Bot Service in Azure Portal` --> `Application Settings` --> `App Settings` and add two new fields
+Go to `Bot Service in Azure Portal` --> `Application Settings` --> `App Settings` and add two new fields
 
 * `BOT_STATE_TABLE` --> `botdata`
 * `STORAGE_CONNECTION` --> `DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=xxx;AccountKey=xxxxx`

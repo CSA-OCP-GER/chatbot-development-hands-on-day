@@ -1,6 +1,12 @@
 # Chatbot Development Hands-On Day
 
-Welcome to the Chatbot Development Hands-On Day! Today, we'll go through how to build a simple "Time-Off Bot" using [Azure Bot Service](https://docs.microsoft.com/en-us/azure/bot-service/). The day is organized by different challenges and participants should complete Step 1 through 4. Step 5 contains additional ideas that can be implemented if desired.
+Welcome to the Chatbot Development Hands-On Day! Today, we'll go through how to build a simple "Time-Off Bot" using [Azure Bot Service](https://docs.microsoft.com/en-us/azure/bot-service/). The day is organized by different challenges and participants should complete Step 1 through 4. Step 5 contains additional ideas that can be implemented if desired. The steps are structured the following way:
+
+* Step 1: Setup a basic bot
+* Step 2: Implement the dialog flow
+* Step 3: Add natural language understanding
+* Step 4: Implement business logic
+* Step 5: Further ideas
 
 Our final bot might look something like this:
 
@@ -74,13 +80,17 @@ Here are some resources that might help you reaching your goal quicker:
 * Using FormFlow [.NET](https://docs.microsoft.com/en-us/azure/bot-service/dotnet/bot-builder-dotnet-formflow)
 * Adaptive Cards in [.NET](https://docs.microsoft.com/en-us/azure/bot-service/dotnet/bot-builder-dotnet-add-rich-card-attachments) and [Node.js](https://github.com/Microsoft/BotBuilder-Samples/tree/master/Node/cards-AdaptiveCards)
 
-### Step 5 (optional) - More ideas
+### Step 5 (optional) - Further ideas
 
 Now that we have a basic bot running, we can start embedding more functionality. Here are some ideas for learning more:
 
 * Use Visual Studio Team Services (VSTS) as your CI/CD pipeline
 * Implement data persistency with Azure Table or Azure CosmosDB
 * Leverage Cognitive Services to show images of the user's vacation destination in the "show time-off" dialog
+
+## Authors
+
+Most of this work has been done by [@clemenssiebler](https://twitter.com/clemenssiebler) and [@erjosito](https://twitter.com/erjosito). If you have questions or ideas on how to make this repo better, please reach out to us!
 
 ## License
 

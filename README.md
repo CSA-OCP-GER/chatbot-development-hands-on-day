@@ -12,6 +12,8 @@ Our final bot might look something like this:
 
 ![Our final bot](images/final.jpg "Our final bot")
 
+A good source for code examples is the official [Bot Builder Samples Repository](https://github.com/Microsoft/BotBuilder-Samples) with its [C#](https://github.com/Microsoft/BotBuilder-Samples/tree/master/CSharp) and [Node.js](https://github.com/Microsoft/BotBuilder-Samples/tree/master/Node) examples.
+
 ## Challenges
 
 ### Step 1 - Setup a basic bot

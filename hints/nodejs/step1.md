@@ -134,6 +134,12 @@ This will commit your code to the git repository in Azure and automatically trig
 1. Add to channel: `Channels` --> `Teams` --> `Enable`
 1. Test: Click `Teams` entry --> link opens --> Teams app opens --> Bot should be there and functional (might take a minute or two until the bot starts responding)
 
+Or, if you prefer to use the Azure CLI, just execute:
+
+```
+az bot msteams create --resource-group chatbotday-nodejs --name cbdhodcs
+```
+
 ## Proper setup of secrets
 
 Setup proper env variables via `dotenv` library:

@@ -31,11 +31,47 @@ az storage account show-connection-string --resource-group chatbotday-csharp --n
 
 ## Create Bot Service and setup deployment via git
 
-1. Create Bot Service based on App Service (Web App Bot) with the `Basic C#` template
+Firstly, install the following two tools:
+
 1. Install [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
 1. Install [Bot Framework Emulator](https://github.com/Microsoft/BotFramework-Emulator/releases)
+
+Next, you can create the Bot Service either through the Azure Portal or via Azure CLI.
+
+### Create Bot Service via Azure Portal
+
+1. Create Bot Service based on App Service (Web App Bot) with the `Basic C#` template
 1. Configure local Git repo: Navigate to your bot --> `Build` --> `Configure Continuous Deployment` --> `Setup` --> `Local Git Repository`
 1. Retrieve Git Clone URL: `All App Service Settings` --> `Overview` --> `Git Clone URL` (might need to set up password first)
+
+### Create Bot Service via CLI
+
+Make sure you have the latest version of the Azure CLI installed. In order to install the `botservice` extension, run:
+
+```
+az extension add -n botservice
+az bot create --location westeurope --resource-group chatbotday-csharp --kind webapp --name cbdhodcs --display-name "Chatbot Hands-On Day Bot" --lang Csharp --storage cbdbotstatecs
+```
+
+Let's check if the bot has been provisioned:
+
+```
+az bot show --resource-group chatbotday-csharp --name cbdhodcs
+```
+
+Configure deployment via a `Local Git Repository`:
+
+```
+az webapp deployment source config-local-git --resource-group chatbotday-csharp --name cbdhodcs
+```
+
+This will give us the Git Clone URL:
+
+```json
+{
+  "url": "https://xxxxx@cbdhodcs.scm.azurewebsites.net/cbdhodcs.git"
+}
+```
 
 ## Clone and install packages (locally)
 
@@ -83,6 +119,8 @@ Lastly, go to `Bot Service in Azure Portal` --> `Application Settings` --> `App 
 * `BotStateTable` --> `botstateprod` (under App Settings)
 * `STORAGE_CONNECTION` --> `DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=xxx;AccountKey=xxxxx` (under Connection Strings as type `Custom`)
 
+Alternatively, you can use the `az webapp config appsettings set` Azure CLI command to set the parameters.
+
 *Note:* There are cleaner ways to keep your credentials out of the code (and code repository in general), e.g., by using [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) or having separate config files for local testing, which are not committed to the source code repository.
 
 ## Test bot locally
@@ -112,5 +150,11 @@ Alternatively, you can use the `Publish` functionality in Visual Studio, which w
 1. Change name of bot: `Settings` --> `Change Display Name` --> `Your new bot's name` (don't forget to hit `Save`)
 1. Add to channel: `Channels` --> `Teams` --> `Enable`
 1. Test: Click `Teams` entry --> link opens --> Teams app opens --> Bot should be there and functional (might take a minute or two until the bot starts responding)
+
+Or, if you prefer to use the Azure CLI, just execute:
+
+```
+az bot msteams create --resource-group chatbotday-csharp --name cbdhodcs
+```
 
 Congratulations, you finished the basic bot setup and you're now able to easily push code updates to Azure!

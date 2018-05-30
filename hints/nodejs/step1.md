@@ -31,11 +31,47 @@ az storage account show-connection-string --resource-group chatbotday-nodejs --n
 
 ## Create Bot Service and setup deployment via git
 
-1. Create Bot Service based on App Service (Web App Bot) with the `Basic Node.js` template
+Firstly, install the following two tools:
+
 1. Install [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
 1. Install [Bot Framework Emulator](https://github.com/Microsoft/BotFramework-Emulator/releases)
+
+Next, you can create the Bot Service either through the Azure Portal or via Azure CLI.
+
+### Create Bot Service via Azure Portal
+
+1. Create Bot Service based on App Service (Web App Bot) with the `Basic Node.js` template
 1. Configure local Git repo: Navigate to your bot --> `Build` --> `Configure Continuous Deployment` --> `Setup` --> `Local Git Repository`
 1. Retrieve Git Clone URL: `All App Service Settings` --> `Overview` --> `Git Clone URL` (might need to set up password first)
+
+### Create Bot Service via CLI
+
+Make sure you have the latest version of the Azure CLI installed. In order to install the `botservice` extension, run:
+
+```
+az extension add -n botservice
+az bot create --location westeurope --resource-group chatbotday-nodejs --kind webapp --name cbdhodcs --display-name "Chatbot Hands-On Day Bot" --lang Node --storage cbdbotstate
+```
+
+Let's check if the bot has been provisioned:
+
+```
+az bot show --resource-group chatbotday-nodejs --name cbdhodcs
+```
+
+Configure deployment via a `Local Git Repository`:
+
+```
+az webapp deployment source config-local-git --resource-group chatbotday-nodejs --name cbdhodcs
+```
+
+This will give us the Git Clone URL:
+
+```json
+{
+  "url": "https://xxxxx@cbdhodcs.scm.azurewebsites.net/cbdhodcs.git"
+}
+```
 
 ## Clone and install packages (locally)
 
@@ -129,6 +165,8 @@ Go to `Bot Service in Azure Portal` --> `Application Settings` --> `App Settings
 
 * `BOT_STATE_TABLE` --> `botdata`
 * `STORAGE_CONNECTION` --> `DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=xxx;AccountKey=xxxxx`
+
+Alternatively, you can use the `az webapp config appsettings set` Azure CLI command to set the parameters.
 
 If you've created a separate Table for testing, make sure to add the `dev` Table to the `.env` file (will be used locally) and add the `prod` Table's name in the App Service.
 

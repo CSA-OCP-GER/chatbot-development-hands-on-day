@@ -34,6 +34,7 @@ Here are some resources that might help you reaching your goal quicker:
 * Managing bot state data in [.NET](https://docs.microsoft.com/en-us/azure/bot-service/dotnet/bot-builder-dotnet-state) or [Node.js](https://docs.microsoft.com/en-us/azure/bot-service/nodejs/bot-builder-nodejs-state)
 * Connecting bots into [channels](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-manage-channels)
 * [Bot Framework Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator)
+* **New!** - [Deploying Bots with Azure CLI](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-tools-az-cli?view=azure-bot-service-3.0)
 
 ### Step 2 - Implement dialog flow
 

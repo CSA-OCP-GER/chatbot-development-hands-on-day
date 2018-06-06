@@ -119,8 +119,8 @@ public class RootDialog : IDialog<object>
         {
             Actions = new List<CardAction>()
             {
-                new CardAction(){ Title = "Request time-off", Value="Request time-off" },
-                new CardAction(){ Title = "Show time-off", Value="Show time-off" }
+                new CardAction(){ Title = "Request time-off", Type=ActionTypes.ImBack, Value="Request time-off" },
+                new CardAction(){ Title = "Show time-off", Type=ActionTypes.ImBack, Value="Show time-off" }
             }
         };
         await context.PostAsync(reply);
@@ -190,10 +190,10 @@ public class RootDialog : IDialog<object>
             switch (selection)
             {
                 case RequestTimeOff:
-                    context.Call(new RequestTimeOffDialog(), Type=ActionTypes.ImBack, this.MessageReceivedAsync);
+                    context.Call(new RequestTimeOffDialog(), this.MessageReceivedAsync);
                     break;
                 case ShowTimeOff:
-                    context.Call(new ShowTimeOffDialog(), Type=ActionTypes.ImBack, this.MessageReceivedAsync);
+                    context.Call(new ShowTimeOffDialog(), this.MessageReceivedAsync);
                     break;
             }
         } catch (TooManyAttemptsException)

@@ -190,10 +190,10 @@ public class RootDialog : IDialog<object>
             switch (selection)
             {
                 case RequestTimeOff:
-                    context.Call(new RequestTimeOffDialog(), this.MessageReceivedAsync);
+                    context.Call(new RequestTimeOffDialog(), Type=ActionTypes.ImBack, this.MessageReceivedAsync);
                     break;
                 case ShowTimeOff:
-                    context.Call(new ShowTimeOffDialog(), this.MessageReceivedAsync);
+                    context.Call(new ShowTimeOffDialog(), Type=ActionTypes.ImBack, this.MessageReceivedAsync);
                     break;
             }
         } catch (TooManyAttemptsException)

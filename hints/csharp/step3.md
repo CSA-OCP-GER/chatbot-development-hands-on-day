@@ -86,8 +86,8 @@ public class LuisRootDialog : LuisDialog<object>
         {
             Actions = new List<CardAction>()
             {
-                new CardAction(){ Title = "Request time-off", Value="Request time-off" },
-                new CardAction(){ Title = "Show time-off", Value="Show time-off" }
+                new CardAction(){ Title = "Request time-off", Type=ActionTypes.ImBack, Value="Request time-off" },
+                new CardAction(){ Title = "Show time-off", Type=ActionTypes.ImBack, Value="Show time-off" }
             }
         };
         await context.PostAsync(reply);

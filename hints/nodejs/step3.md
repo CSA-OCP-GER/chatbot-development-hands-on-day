@@ -1,11 +1,15 @@
 # Hints for completing Step 3
 
+**Common pitfalls in this step**
+> * Ensure `matches: 'IntentName'` matches exactly the LUIS intent name (case sensitive!)
+> * Make sure your LUIS `None` intent has some utterances (Reason [see here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-intent#none-intent-is-fallback-for-app))
+
 ## LUIS Model training
 
 1. Create new LUIS app
 1. Add `Greeting` intent and write in examples
-1. Add `RequestTimeoff` intent and write in examples
-1. Add `ShowTimeoff` intent and write in examples
+1. Add `RequestTimeOff` intent and write in examples
+1. Add `ShowTimeOff` intent and write in examples
 1. Train model
 1. Publish model, and note down the complete LUIS Endpoint URL (including `Subscription-Key`)
 

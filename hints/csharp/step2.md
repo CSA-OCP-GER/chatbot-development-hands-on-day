@@ -1,5 +1,8 @@
 # Hints for completing Step 2
 
+**Common pitfalls in this step**
+> * Make sure your `Dialog` classes are `Serializable` (otherwise you'll experience weird `500` errors)
+
 ## Main dialog with selection buttons
 
 *As a side note*: There are many ways of how to implement this, but as we'll enhance the dialog routing logic with LUIS in the next step, let's just get something working quickly.

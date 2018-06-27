@@ -1,11 +1,18 @@
 # Hints for completing Step 3
 
+**Common pitfalls in this step**
+> * Double check that `LuisAPIHostName` is set correctly (without the `https://` prefix)
+> * Ensure `[LuisIntent("...")]` matches exactly the LUIS intent name (case sensitive!)
+> * Make sure your code has annotations for all LUIS intents
+> * Make sure your `Dialog` classes are `Serializable` (otherwise you'll experience weird `500` errors)
+> * Make sure your LUIS `None` intent has some utterances (Reason [see here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-intent#none-intent-is-fallback-for-app))
+
 ## LUIS Model training
 
 1. Create new LUIS app
 1. Add `Greeting` intent and write in examples
-1. Add `RequestTimeoff` intent and write in examples
-1. Add `ShowTimeoff` intent and write in examples
+1. Add `RequestTimeOff` intent and write in examples
+1. Add `ShowTimeOff` intent and write in examples
 1. Train model
 1. Publish model, and note down the LUIS Endpoint URL
 
